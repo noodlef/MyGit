@@ -337,7 +337,7 @@ int main() {
 	//searchPath();
 	//BFS();
 	//printBFS(std::cout, node,6, 1);
-	stronglyConnectedComponents();
+	//stronglyConnectedComponents();                      // dev
 	system("pause");
 	return 0;
 }
