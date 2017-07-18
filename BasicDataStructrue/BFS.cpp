@@ -328,7 +328,7 @@ void stronglyConnectedComponents() {
 		std::cout << std::endl;
 	}
  }
-
+#include"Hash.h"
 int main() {
 	//DFS();
 	//deepFirstSearch();
@@ -337,7 +337,8 @@ int main() {
 	//searchPath();
 	//BFS();
 	//printBFS(std::cout, node,6, 1);
-	stronglyConnectedComponents();                    //123456
+	//stronglyConnectedComponents();                    //123456
+	std::cout << hash(12584666);
 	system("pause");
 	return 0;
 }
