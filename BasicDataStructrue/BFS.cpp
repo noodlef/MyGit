@@ -286,7 +286,7 @@ void topologicalSort() {
 //将有向图进行强联通分量分解
 // 采用求两次dfs
 //将有向图进行转置
-void graphTransfer(templa::LinkList<Edge> list[]){
+void GraphTransfer(templa::LinkList<Edge> list[]){
 	size_t edgeNum[vertexNum];                         // 每个顶点相连的边个数
 	for (size_t i = 0; i != vertexNum; ++i)
 		edgeNum[i] = list[i].size();
@@ -300,11 +300,11 @@ void graphTransfer(templa::LinkList<Edge> list[]){
 	}
 }
 Color col[vertexNum] = { WHITE };
-void stronglyConnectedComponents() {
+void StronglyConnectedComponents() {
 	deepFirstSearch();                                     // 深度优先搜索
 	auto beg = std::begin(node), tail = std::end(node);    
 	templa::quickSort(beg, tail, compare);
-	graphTransfer(list);                                   // 求转置图
+	GraphTransfer(list);                                   // 求转置图
 	templa::Stack<size_t> myStack;
 	for (size_t index = 0; index != vertexNum; ++index){
 		myStack.push(node[index].v);                        
@@ -337,7 +337,7 @@ int main() {
 	//searchPath();
 	//BFS();
 	//printBFS(std::cout, node,6, 1);                      // accer-noodle
-	//stronglyConnectedComponents();                      // dev
+	//StronglyConnectedComponents();                      // dev
 	system("pause");
 	return 0;
 }
