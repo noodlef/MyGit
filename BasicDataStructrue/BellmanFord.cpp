@@ -18,7 +18,7 @@ struct Vertex {
 	int distance;
 };
 // 有向图顶点的个数
-const size_t vertexNum = 5;                                                    
+const size_t vertexNum = 4;                                                    
 templa::LinkList<Edge> list[vertexNum];
 Vertex vertex[vertexNum];
 //**************************************************************************
@@ -82,7 +82,7 @@ bool BellmanFord(std::ifstream &file, size_t sourceVertex) {
 // 该算法要求边的权重为正值
 #include"PriorityQueue.h"
 void Dijkstra(std::ifstream &file, size_t sourceVertex) {
-	PriorityQueue<int, size_t> Q;
+	PriorityQueue<int, size_t,'m'> Q;
 	Data <int, size_t> d;
 	GraphInit(file);
 	vertex[sourceVertex].distance = 0;
@@ -119,7 +119,7 @@ void PrintPath(size_t sourceVertex) {
 		path.push(dest);
 		while ((v = vertex[v].parent) != NIL) 
 			path.push(v);
-		std::cout << vertex[dest].distance << std::endl;
+		std::cout <<"path distance : " << vertex[dest].distance << std::endl;
 		if ((v = path.pop() )== sourceVertex) {
 			std::cout << v;
 			while (!path.stackEmpty()) {
@@ -130,14 +130,16 @@ void PrintPath(size_t sourceVertex) {
 		}
 		else 
 			std::cout << "no path" << std::endl;
-		
+		std::cout << std::endl;
 	}
 }
 //*****************************************************************************
 int main() {
-	std::ifstream file("bellman.txt");
+	//std::ifstream file("bellman.txt");
+	std::ifstream file("Dijkstra.txt");
 	size_t sourceVertex = 0;
-	BellmanFord(file, sourceVertex);
+	//BellmanFord(file, sourceVertex);
+	Dijkstra(file, sourceVertex);
 	PrintPath(sourceVertex);
 	system("pause");
 	return 0;

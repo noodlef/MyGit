@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BellmanFord.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Heap.cpp">
+    <ClCompile Include="MaximumFlow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

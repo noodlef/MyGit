@@ -146,8 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BellmanFord.cpp" />
-    <ClCompile Include="Heap.cpp" />
+    <ClCompile Include="MaximumFlow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hash.h" />
