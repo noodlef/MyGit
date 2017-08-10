@@ -5,7 +5,6 @@
 #include<string>
 //下面是自己编写的数据结构
 #include"Queue.h"
-#include"stack.h"
 #include"LinkList.h"
 #define INF 65535
 #define NIL -1
@@ -28,6 +27,22 @@ templa::LinkList<Edge> Graph[vertexNum];
 // 有向图 G(V,E)对应的残存图 G_f(V,E)
 templa::LinkList<Edge> ResidualGraph[vertexNum];
 Vertex vertex[vertexNum];
+//**************************************************************************
+//struct list_head;
+struct list_head {
+	list_head *prece;
+	list_head *succ;
+};
+struct Fox {
+	Edge e;
+	list_head list;
+};
+//struct list_head {
+//	list_head *prece;
+//	list_head *succ;
+//};
+//#define container_of(ptr, type, member)( \
+
 //**************************************************************************
 // 顶点初始化, 用于 BFS 算法
 static void VertexInit() {
@@ -52,14 +67,34 @@ static void GraphInit(std::ifstream &file) {
 	}
 }
 //****************************************************************************
-//
+static size_t GetEdge(size_t s, size_t t, templa::LinkList<Edge> *Graph) {
+	size_t counter = Graph[s].size();
+	for (size_t i = 0; i != counter; ++i) {
+		if (Graph[s][i].tail == t)
+			return i;
+	}
+	return 0;
+}
+static int GetPath(Queue<size_t> &path, templa::LinkList<Edge> *Graph) {
+	int flow = INF,f;
+	size_t  j = path[0], i,index;
+	while ((i = vertex[j].parent) != NIL) {
+		path.push_front(i);
+		index = GetEdge(i, j, Graph);
+		if ((f = Graph[i][index].Mflow) < flow)
+			flow = f;
+		j = i;
+	}
+	return flow;
+}
+//****************************************************************************
 //  ----------------------广度优先搜索算法————————————
 //
 // path 用于存放路径，初始时其中放有 sourceVertex, destVertex
-// 如果找到从 sourceVertex ---> destVertex 的路径则函数返回true
-// 否则函数返回false，且路径存放在 path 中
-static bool BFS(Queue<size_t> &path, templa::LinkList<Edge> *Graph) {
-	size_t sourceVertex = path.pop_front(),destVertex = path[0];
+// 如果找到从 sourceVertex ---> destVertex 的路径则函数返回该
+// 路径的最大流 flow,否则函数返回 0，且路径存放在 path 中
+static int BFS(Queue<size_t> &path, templa::LinkList<Edge> *Graph) {
+	size_t sourceVertex = path.pop_front(), destVertex = path[0];
 	Queue<size_t> q;
 	// 对各个顶点 V 初始化
 	VertexInit();
@@ -70,52 +105,65 @@ static bool BFS(Queue<size_t> &path, templa::LinkList<Edge> *Graph) {
 		size_t counter = Graph[u].size();
 		for (size_t i = 0; i != counter; ++i) {
 			size_t temp = Graph[u][i].tail;
-			if (vertex[temp].color == WHITE) {
+			if (vertex[temp].color == WHITE) 
+			{
 				vertex[temp].color = GREY;
 				vertex[temp].parent = u;
 				//已经找到路径了，下面把路径存在 path 中
-				if (temp == destVertex) {
-					while ((temp = vertex[temp].parent) != sourceVertex) 
-						path.push_front(temp);
-					path.push_front(sourceVertex);
-					return true;
-				}
+				if (temp == destVertex)
+					return GetPath(path, Graph);
 				q.push_back(temp);
 			}
 		}
 		vertex[u].color = BLACK;
 	}
-	return false;
+	return 0;
 }
 //****************************************************************************
 //  ----------------------最大流 EdmondsKarp 算法————————————
 int EdmondsKarp(std::ifstream &file, size_t sourceVertex , size_t destVertex ) {
-	size_t ret = 0;
+	int flow = 0, ret = 0;
 	Queue<size_t> path;
 	path.push_back(sourceVertex);
 	path.push_back(destVertex);
 	GraphInit(file);
-	while (BFS(path, ResidualGraph)) {
-		size_t s = path.pop_front(),t;
+	while (flow = BFS(path, ResidualGraph)) {
+		for (int i = 0; i != path.Size(); ++i) {
+			std::cout << path[i] << " " ;
+		}
+		std::cout << "flow = " << flow << std::endl;
+		size_t s = path.pop_front(),t,index;
 			while (!path.empty()) {
 				t = path.pop_front();
-				{
-
-				}
+				index = GetEdge(s, t, ResidualGraph);
+				if (ResidualGraph[s][index].Mflow > flow)
+					ResidualGraph[s][index].Mflow -= flow;
+				else
+					ResidualGraph[s].pop(index);
+				if (index = GetEdge(t, s, ResidualGraph))
+					ResidualGraph[t][index].Mflow += flow;
+			    else
+					ResidualGraph[t].push_back({ s,flow,0 });
 				s = t;
 			}
+			ret += flow;
+			path.push_back(sourceVertex);
+			path.push_back(destVertex);
 	}
+	return ret;
 }
 //****************************************************************************
-int main() {
-	std::ifstream file("MaximumFlow.txt");
-	size_t sourceVertex = 0, destVertex = 4;
-	Queue<size_t> path;
-	path.push_back(sourceVertex);
-	path.push_back(destVertex);
-	GraphInit(file);
-	if (BFS(path, Graph))
-		while (!path.empty())
-			std::cout << path.pop_front() << "-->";
-	system("pause");
-}
+//int main() {
+//	std::ifstream file("MaximumFlow.txt");
+//	size_t sourceVertex = 0, destVertex = 5;
+//	int a = EdmondsKarp(file, sourceVertex, destVertex);
+//	/*Queue<size_t> path;
+//	path.push_back(sourceVertex);
+//	path.push_back(destVertex);
+//	GraphInit(file);
+//	if (BFS(path, Graph))
+//		while (!path.empty())
+//			std::cout << path.pop_front() << "-->";
+//	*/
+//	system("pause");
+//}

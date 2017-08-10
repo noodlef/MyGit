@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MaximumFlow.cpp">
+    <ClCompile Include="MaximumFlow_Preflow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

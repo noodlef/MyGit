@@ -13,8 +13,10 @@ namespace templa {
 		void push_front(const T1& e);
 		void insert(std::initializer_list<T1> lis);                            // 列表初始化
 		T1 pop_front();                                       
-		T1 pop_back();                                            
+		T1 pop_back();  
+		T1 pop(size_t index = 0);                                             // 弹出元素
 		T1& operator[](size_t index);                                          // 0，1，...n-1
+		T1 at(size_t index);                                                 // 0，1，...n-1
 		bool empty() const;
 		size_t size() const;
 	private:
@@ -29,7 +31,6 @@ namespace templa {
 				ret = ret->successor;
 			return ret;
 		}
-		T1 pop(size_t index = 0);                                             // 弹出元素
 		ElementType *head;
 		ElementType *end;
 		void buildLink(ElementType *predece, ElementType *succ);
@@ -135,6 +136,16 @@ namespace templa {
 	template<typename T1>
 	T1& LinkList<T1>::
 		operator[](size_t index) {
+		if (index < 0 || index >= elementCnt)
+			//throw std::string("out of index");
+			return T1();                                                        ///下标越界（异常）
+		ElementType *temp = search(index);
+		return temp->data;
+	}
+	//***********************************************************************
+	template<typename T1>
+	T1 LinkList<T1>::
+		at(size_t index) {
 		if (index < 0 || index >= elementCnt)
 			//throw std::string("out of index");
 			return T1();                                                        ///下标越界（异常）
